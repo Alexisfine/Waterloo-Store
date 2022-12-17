@@ -6,13 +6,13 @@ const router = express.Router();
 
 // Create disk storage engine:
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination(req, file, cb) {
         cb(null, 'uploads/');
     },
-    filename: function (req, file, cb) {
+    filename(req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
-})
+});
 
 // Verify file type
 const checkFileType = (file, cb) => {
@@ -25,20 +25,19 @@ const checkFileType = (file, cb) => {
     if (mimeType && extname) {
         return cb(null, true);
     } else {
-        cb('jpg, jpeg, or png type only')
+        cb(new Error('jpg, jpeg, or png type only'));
     }
 }
 // Upload
 const upload = multer({
     storage,
-    fileFilter: function (req, file, cb) {
-        checkFileType(file, cb);
-    }
+    // fileFilter: function (req, file, cb) {
+    //     checkFileType(file, cb);
+    // }
 })
 
 // Create file upload router
-router.post('/', upload.single('image'), (req, res, next)=> {
+router.post('/', upload.single('image'), (req, res)=> {
     res.send('/'+req.file.path);
-
 })
 export default router;

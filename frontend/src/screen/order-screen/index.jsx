@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
-import {Form, Button, Row, Col, Image, Card, ListGroup, ListGroupItem} from 'react-bootstrap';
+import {Form, Button, Row, Col, Image, Card, ListGroup, ListGroupItem, Modal} from 'react-bootstrap';
 import {useDispatch,useSelector} from "react-redux";
 import Message from "../../components/Message";
 import {getOrderDetails} from "../../actions/orderAction";
@@ -13,6 +13,13 @@ const OrderScreen = () => {
     const orderDetails = useSelector(state=>state.orderDetails);
 
     const {order, loading, error} = orderDetails;
+
+    const [show, setShow] = useState(false);
+
+    const [image, setImage] = useState('');
+
+    const [text, setText] = useState('Please scan the code')
+
 
     if (!loading) {
         const addDecimals = (number) => {
@@ -27,7 +34,16 @@ const OrderScreen = () => {
         if (!order || id !== order._id) {
             dispatch(getOrderDetails(id));
         }
-    }, [order, id])
+    }, [order, id]);
+
+    const handleClose = () =>{
+        setShow(false);
+    }
+
+    const handlePayment = () =>{
+        setImage('https://www.thenewstep.cn/pay/index.php?'+'pid='+order._id);
+        setShow(true);
+    }
 
 
     return (
@@ -112,6 +128,34 @@ const OrderScreen = () => {
                                         <Col>Total Price:</Col>
                                         <Col>${order.totalPrice}</Col>
                                     </Row>
+                                </ListGroupItem>
+                                <ListGroupItem>
+                                    <Button
+                                    type='button' classname='btn-block'  onClick={handlePayment} disable={order.orderItems === 0}>
+                                    Pay</Button>
+                                    <Modal show={show} onHide={handleClose}>
+
+                                        <Modal.Header closeButton>
+                                            <Modal.Title>Order Id: {order._id}</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            <p>Total Price: {order.totalPrice}</p>
+                                            <p>Payment Method: {order.paymentMethod}</p>
+                                            <Row>
+                                                <Col md={6} style={{textAlign:'center'}}>
+                                                    <Image fluid src={image}></Image>
+                                                    <p style={{backgroundColor:'#00c800', color:'white'}}>
+                                                        {text}
+                                                    </p>
+                                                </Col>
+                                            </Row>
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <Button variant="primary" onClick={handleClose}>
+                                                Close
+                                            </Button>
+                                        </Modal.Footer>
+                                    </Modal>
                                 </ListGroupItem>
 
                             </ListGroup>

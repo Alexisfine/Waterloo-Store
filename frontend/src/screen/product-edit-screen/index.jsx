@@ -30,7 +30,6 @@ const ProductEditScreen = () => {
     const productUpdate = useSelector((state)=>state.productUpdate);
     const {loading:loadingUpdate, error:errorUpdate, success:successUpdate} = productUpdate;
 
-
     useEffect(()=>{
         if (successUpdate) {
             dispatch({type:PRODUCT_UPDATE_RESET});
@@ -68,10 +67,8 @@ const ProductEditScreen = () => {
     const uploadFileHandler = async (e) => {
         // Get file
         const file = e.target.files[0];
-        console.log(file);
         const formData = new FormData();
         formData.append('image', file);
-        console.log(formData.entries())
         setUploading(true);
         try {
             const config = {
@@ -83,7 +80,7 @@ const ProductEditScreen = () => {
             setImage(data);
             setUploading(false);
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
             setUploading(false);
         }
     }
@@ -116,7 +113,6 @@ const ProductEditScreen = () => {
                             onChange={uploadFileHandler}>
                         </Form.Control>
                         {uploading && <Loader/>}
-
 
                     </Form.Group>
                     <Form.Group controlId='brand'>

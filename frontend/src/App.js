@@ -12,6 +12,7 @@ import ProfileScreen from "./screen/profile-screen";
 import ShippingScreen from "./screen/shipping-screen";
 import PaymentScreen from "./screen/payment-screen";
 import OrderScreen from "./screen/order-screen";
+import OrderListScreen from "./screen/orderlist-screen";
 import UserListScreen from "./screen/user-list-screen";
 import UserEditScreen from "./screen/user-edit-screen";
 import ProductListScreen from "./screen/product-list-screen";
@@ -30,6 +31,7 @@ function App() {
                   <Route path='/profile' element={<ProfileScreen/>}/>
                   <Route path='/' element={<HomeScreen/>} exact/>
                   <Route path='/products/:id' element={<ProductScreen/>}/>
+                  <Route path='/admin/orderlist' element={<OrderListScreen/>}/>
                   <Route path='/cart'>
                       <Route path='/cart/:id' element={<CartScreen/>}/>
                       <Route path='/cart' element={<CartScreen/>}/>
